@@ -1,0 +1,40 @@
+<% branches = repository.no_merged_branches || [] %>
+<% if branches.present? && User.current.allowed_to?(:add_issues, project) %>
+
+<h2>Pull Request</h2>
+
+<div class="autoscroll">
+  <table class="list changesets">
+    <thead>
+      <tr>
+        <th><%= l(:label_repository_plural) %></th>
+        <th>#</th>
+        <th><%= l(:label_date) %></th>
+        <th><%= l(:field_author) %></th>
+        <th><%= l(:field_comments) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% branches.each do |branch| %>
+      <% repository_name = repository.identifier + '@' + branch %>
+      <% changeset = repository.latest_changesets('', branch, 1).first %>
+      <% comments = changeset.comments.gsub(/(\r\n|\n|\r)/, "\r\n").split("\r\n") %>
+      <tr class="changeset">
+        <td class="name"><%= link_to(repository_name, controller: :repositories, action: :show, repository_id: repository.identifier_param, rev: branch) %></td>
+        <td class="id"><%= link_to_revision(changeset, repository) %></td>
+        <td class="committed_on"><%= format_time(changeset.committed_on) %></td>
+        <td class="author"><%= changeset.user.blank? ? changeset.author.to_s.truncate(30) : link_to_user(changeset.user) %></td>
+        <td class="comments"><%= format_changeset_comments changeset, short: true %></td>
+        <td class="buttons">
+          <%= link_to l(:label_issue_new), _new_project_issue_path(project, issue: {
+            subject: comments.shift, description: comments.join("\r\n"), assigned_to_id: changeset.user_id
+          }), class: 'icon icon-add new-issue' %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% end %>

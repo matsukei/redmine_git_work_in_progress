@@ -8,4 +8,4 @@ Redmine::Plugin.register :redmine_git_work_in_progress do
   author_url 'http://www.matsukei.co.jp/'
 end
 
-require_relative 'lib/git_work_in_progress'
+require_relative 'lib/git_wip'
