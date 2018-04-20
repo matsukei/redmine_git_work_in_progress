@@ -4,10 +4,12 @@ class CreateGitWipBranches < ActiveRecord::Migration
       t.integer :repository_id
       t.integer :issue_id
 
-      t.string :name
       t.boolean :merged
       t.boolean :reverted
       t.boolean :deleted
+
+      t.string :base_name
+      t.string :compare_name
 
       t.timestamps
     end

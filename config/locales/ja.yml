@@ -1,1 +1,3 @@
 ja:
+  label_no_merged_branches: デフォルトブランチに未マージのブランチ
+  label_base_branch_to_be_merged: から

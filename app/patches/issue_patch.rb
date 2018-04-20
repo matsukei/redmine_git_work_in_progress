@@ -5,6 +5,10 @@ module GitWip
     extend ActiveSupport::Concern
 
     included do
+      safe_attributes 'git_wip_branch_attributes'
+
+      has_one :git_wip_branch, autosave: true, dependent: :nullify, class_name: 'GitWip::Branch'
+      accepts_nested_attributes_for :git_wip_branch
     end
 
   end

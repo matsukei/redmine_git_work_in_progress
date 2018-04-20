@@ -1,0 +1,3 @@
+<%= render_tabs(issue_history_tabs(issue, journals), params[:tab] || 'notes') %>
+
+<% heads_for_wiki_formatter if User.current.allowed_to?(:edit_issue_notes, issue.project) || User.current.allowed_to?(:edit_own_issue_notes, issue.project) %>

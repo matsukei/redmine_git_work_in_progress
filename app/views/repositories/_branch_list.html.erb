@@ -1,7 +1,7 @@
 <% branches = repository.no_merged_branches || [] %>
 <% if branches.present? && User.current.allowed_to?(:add_issues, project) %>
 
-<h2>Pull Request</h2>
+<h2><%= l(:label_no_merged_branches) %></h2>
 
 <div class="autoscroll">
   <table class="list changesets">
@@ -27,9 +27,9 @@
         <td class="author"><%= changeset.user.blank? ? changeset.author.to_s.truncate(30) : link_to_user(changeset.user) %></td>
         <td class="comments"><%= format_changeset_comments changeset, short: true %></td>
         <td class="buttons">
-          <%= link_to l(:label_issue_new), _new_project_issue_path(project, issue: {
-            subject: comments.shift, description: comments.join("\r\n"), assigned_to_id: changeset.user_id
-          }), class: 'icon icon-add new-issue' %>
+          <%= link_to l(:label_issue_new), _new_project_issue_path(project,
+            issue: { subject: comments.shift, description: comments.join("\r\n"), assigned_to_id: changeset.user_id },
+            git_wip_branch: { repository_id: repository.id, base_name: repository.default_branch, compare_name: branch }), class: 'icon icon-add new-issue' %>
         </td>
       </tr>
       <% end %>

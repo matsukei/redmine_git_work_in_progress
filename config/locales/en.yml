@@ -1,1 +1,3 @@
 en:
+  label_no_merged_branches: Branches not yet merged to default branch
+  label_base_branch_to_be_merged: to merge

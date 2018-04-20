@@ -1,0 +1,28 @@
+<div id="journals-tabs">
+  <div class="tabs">
+    <ul>
+      <li>
+        <a id="tab-history" class="selected" onclick="showTab('history', this.href); this.blur(); return false;">チケット</a>
+      </li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+</div>
+
+
+<script>
+var renderHistoryTab = function(history) {
+  history.before("<div id='journals-tab' class='tabs'><ul></ul></div>");
+
+  var tab = $('#journals-tab').find('ul');
+  tab.append("<li></li>");
+};
+
+$(document).ready(function() {
+  var history = $('#history');
+  if (history) {
+    renderHistoryTab(history);
+  }
+});
+</script>
