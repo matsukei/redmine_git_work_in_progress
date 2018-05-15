@@ -1,3 +1,5 @@
 en:
   label_no_merged_branches: Branches not yet merged to default branch
-  label_base_branch_to_be_merged: to merge
+  label_base_branch_to_be_merged: merge　to
+  label_view_unmerged_diff: "View differences for %{base_branch} from %{compare_branch}"
+  label_merge_branch: Merge

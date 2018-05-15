@@ -1,3 +1,6 @@
 ja:
   label_no_merged_branches: デフォルトブランチに未マージのブランチ
   label_base_branch_to_be_merged: から
+  label_view_unmerged_diff: "%{compare_branch} と %{base_branch} の差分を表示"
+  label_merge_branch: Merge
+

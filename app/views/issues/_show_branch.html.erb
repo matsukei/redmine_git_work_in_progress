@@ -1,0 +1,18 @@
+<% if @issue.git_wip_branch.present? && @issue.git_wip_branch.active? %>
+  <hr>
+
+  <% base_branch_name = @issue.git_wip_branch.base_name %>
+  <% compare_branch_name = @issue.git_wip_branch.compare_name %>
+  <strong>
+    <%= link_to(l(:label_view_unmerged_diff, compare_branch: compare_branch_name, base_branch: base_branch_name), {
+      controller: :repositories, action: :diff, id: issue.project, rev: compare_branch_name, rev_to: base_branch_name
+    }) %>
+  </strong>
+
+  <div class="contextual">
+    <% if User.current.allowed_to?(:manage_repository, @issue.project) %>
+      <%= link_to(l(:label_merge_branch), merge_branches_path(issue_id: @issue.id), class: 'icon icon-add', method: :post) %>
+    <% end %>
+  </div>
+
+<% end %>

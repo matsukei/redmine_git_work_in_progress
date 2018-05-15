@@ -11,8 +11,8 @@ module GitWip
         io.each_line do |line|
           branch_rev = line.match('\s*(\*?)\s*(.*?)\s*([0-9a-f]{40}).*$')
           bran = Redmine::Scm::Adapters::GitAdapter::GitBranch.new(branch_rev[2])
-          bran.revision =  branch_rev[3]
-          bran.scmid    =  branch_rev[3]
+          bran.revision = branch_rev[3]
+          bran.scmid = branch_rev[3]
           bran.is_default = ( branch_rev[1] == '*' )
           brans << bran
         end
@@ -39,6 +39,41 @@ module GitWip
       # git checkout master
       # git apply test.patch --check
     end
+
+    def merge_base_identifier(base_identifier, compare_identifier)
+      identifier = nil
+      cmd_args = %w|show-branch --merge-base|
+      cmd_args << base_identifier
+      cmd_args << compare_identifier
+
+      git_cmd(cmd_args) do |io|
+        identifier = io.lines.map(&:chomp).first
+      end
+
+      identifier
+    rescue Redmine::Scm::Adapters::AbstractAdapter::ScmCommandAborted
+      nil
+    end
+
+    def git_cmd(args, options = {}, &block)
+      repo_path = root_url || url
+      full_args = ['--git-dir', repo_path] unless options[:remove_git_dir]
+      if self.class.client_version_above?([1, 7, 2])
+        full_args << '-c' << 'core.quotepath=false'
+        full_args << '-c' << 'log.decorate=no'
+      end
+      full_args += args
+      ret = shellout(
+               self.class.sq_bin + ' ' + full_args.map { |e| shell_quote e.to_s }.join(' '),
+               options,
+               &block
+               )
+      if $? && $?.exitstatus != 0
+        raise ScmCommandAborted, "git exited with non-zero status: #{$?.exitstatus}"
+      end
+      ret
+    end
+    private :git_cmd
 
   end
 end

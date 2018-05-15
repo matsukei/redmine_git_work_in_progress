@@ -4,13 +4,31 @@ class GitWip::Branch < ActiveRecord::Base
   belongs_to :repository
   belongs_to :issue
 
-  # mkdir hogehoge
-  # git --bare init --shared
-  # git update-server-info
+  # TODO
+  scope :no_merged, -> { where.not(id: 9999999) }
 
-  # repository.default_branch
-  #=> "master"
+  def active?
+    return self.repository.present? && self.base_name.present? && self.compare_name.present?
+  end
 
-  # repository.diff(path, rev, rev_to)
+  def fetch_changesets
+    return unless self.active?
+
+    commits = self.repository.no_merged_commits(self.base_name, self.compare_name)
+    commits.each do |commit|
+      i = commit.find_referenced_issue_by_id(self.issue_id)
+      commit.issues << i if i && i.visible? && !commit.issues.include?(i)
+    end
+  end
+
+  # TODO
+  def can_merge?
+    true
+  end
+
+  # TODO
+  def can_rebase?
+    true
+  end
 
 end
