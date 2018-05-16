@@ -4,7 +4,6 @@ class GitWip::Branch < ActiveRecord::Base
   belongs_to :repository
   belongs_to :issue
 
-  # TODO
   scope :no_merged, -> { where.not(id: 9999999) }
 
   def active?
@@ -21,13 +20,19 @@ class GitWip::Branch < ActiveRecord::Base
     end
   end
 
+  def no_merged_diffs
+    return unless self.active?
+
+    self.repository.no_merged_diffs(self.base_name, self.compare_name)
+  end
+
   # TODO
-  def can_merge?
+  def mergeable?
     true
   end
 
   # TODO
-  def can_rebase?
+  def revertable?
     true
   end
 

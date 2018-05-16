@@ -17,27 +17,27 @@ module GitWip
           brans << bran
         end
       end
-      brans.sort!
+
+      return brans.sort!
     rescue Redmine::Scm::Adapters::AbstractAdapter::ScmCommandAborted
-      nil
+      return []
     end
 
-    def no_fast_forward_merge
-      # git merge --no-ff feature-branch
-    end
+    def no_merged_diffs(base_branch, compare_branch)
+      diffs = []
+      cmd_args = %w|diff --no-color|
+      cmd_args << base_branch
+      cmd_args << compare_branch
 
-    def destroy_branch(force = false)
-      # git branch -d feature-branch
-      # git branch --delete --force feature-branch
-    end
+      git_cmd(cmd_args) do |io|
+        io.each_line do |line|
+          diffs << line
+        end
+      end
 
-    def conflict?
-      # git merge feature-branch --no-commit
-      # git merge --abort
-
-      # git format-patch master  --stdout > test.patch
-      # git checkout master
-      # git apply test.patch --check
+      return diffs
+    rescue Redmine::Scm::Adapters::AbstractAdapter::ScmCommandAborted
+      return []
     end
 
     def merge_base_identifier(base_identifier, compare_identifier)
@@ -50,30 +50,10 @@ module GitWip
         identifier = io.lines.map(&:chomp).first
       end
 
-      identifier
+      return identifier
     rescue Redmine::Scm::Adapters::AbstractAdapter::ScmCommandAborted
-      nil
+      return nil
     end
-
-    def git_cmd(args, options = {}, &block)
-      repo_path = root_url || url
-      full_args = ['--git-dir', repo_path] unless options[:remove_git_dir]
-      if self.class.client_version_above?([1, 7, 2])
-        full_args << '-c' << 'core.quotepath=false'
-        full_args << '-c' << 'log.decorate=no'
-      end
-      full_args += args
-      ret = shellout(
-               self.class.sq_bin + ' ' + full_args.map { |e| shell_quote e.to_s }.join(' '),
-               options,
-               &block
-               )
-      if $? && $?.exitstatus != 0
-        raise ScmCommandAborted, "git exited with non-zero status: #{$?.exitstatus}"
-      end
-      ret
-    end
-    private :git_cmd
 
   end
 end

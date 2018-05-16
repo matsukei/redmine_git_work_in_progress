@@ -13,9 +13,9 @@ module GitWip
     end
 
     def no_merged_branches
-      return nil unless self.git?
+      return [] unless self.git?
 
-      return self.scm.no_merged_branches - self.ignore_branches
+      return self.scm.no_merged_branches
     end
 
     def ignore_branches
@@ -42,6 +42,12 @@ module GitWip
       base_revisions = self.scm.revisions('', identifier_from, base_branch)
       compare_revisions = self.scm.revisions('', identifier_from, compare_branch)
       return self.changesets.where(scmid: compare_revisions.map(&:scmid)).where.not(scmid: base_revisions.map(&:scmid))
+    end
+
+    def no_merged_diffs(base_branch, compare_branch)
+      return nil unless self.git?
+
+      return self.scm.no_merged_diffs(base_branch, compare_branch)
     end
 
   end

@@ -42,7 +42,6 @@ Rails.configuration.to_prepare do
   # GitWip::ProjectPatch.tap do |mod|
   #   Project.send :include, mod unless Project.include?(mod)
   # end
-
 end
 
 Dir[GitWip.root.join('app/hooks/**/*_hook.rb')].each { |f| require_dependency f }

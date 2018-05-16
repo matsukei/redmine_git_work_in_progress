@@ -1,10 +1,10 @@
-<% branches = repository.no_merged_branches || [] %>
+<% branches = (repository.no_merged_branches || []) - repository.ignore_branches %>
 <% if branches.present? && User.current.allowed_to?(:add_issues, project) %>
 
 <h2><%= l(:label_no_merged_branches) %></h2>
 
 <div class="autoscroll">
-  <table class="list changesets">
+  <table class="list">
     <thead>
       <tr>
         <th><%= l(:label_repository_plural) %></th>
@@ -20,7 +20,7 @@
       <% repository_name = repository.identifier + '@' + branch %>
       <% changeset = repository.latest_changesets('', branch, 1).first %>
       <% comments = changeset.comments.gsub(/(\r\n|\n|\r)/, "\r\n").split("\r\n") %>
-      <tr class="changeset">
+      <tr>
         <td class="name"><%= link_to(repository_name, controller: :repositories, action: :show, repository_id: repository.identifier_param, rev: branch) %></td>
         <td class="id"><%= link_to_revision(changeset, repository) %></td>
         <td class="committed_on"><%= format_time(changeset.committed_on) %></td>
