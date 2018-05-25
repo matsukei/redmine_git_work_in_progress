@@ -1,0 +1,20 @@
+<% if @issue.git_wip_branch.present? && @issue.git_wip_branch.active? %>
+  <% base_branch_name = @issue.git_wip_branch.base_name %>
+  <% compare_branch_name = @issue.git_wip_branch.compare_name %>
+
+  <hr>
+  <p>
+    <a href="#" class="sort asc" onclick="$('#no_merged_diffs').toggle();$(this).toggleClass('desc');return false;">
+      <%= l(:label_view_unmerged_diff, compare_branch: compare_branch_name, base_branch: base_branch_name) %>
+    </a>
+  </p>
+
+  <% content_for :header_tags do %>
+    <%= stylesheet_link_tag "scm" %>
+  <% end %>
+
+  <div id="no_merged_diffs" style="display: none;">
+    <% diff = @issue.git_wip_branch.no_merged_diffs.join("\n") %>
+    <%= render partial: 'common/diff', locals: { diff: diff, diff_type: 'inline', diff_style: 'Git' } %>
+  </div>
+<% end %>

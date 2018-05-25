@@ -1,0 +1,9 @@
+ja:
+  label_no_merged_branches: デフォルトブランチに未マージのブランチ
+  label_compare_branch: 作業ブランチ
+  label_base_branch: マージ先のブランチ
+
+  label_base_branch_to_be_merged: "%{compare_branch} と %{base_branch} の差分を表示"
+  label_view_unmerged_diff: "%{compare_branch} と %{base_branch} の差分を表示"
+  label_merge_branch: マージ
+  label_revert_branch: 元に戻す

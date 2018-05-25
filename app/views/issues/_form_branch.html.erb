@@ -1,0 +1,23 @@
+<% record = issue.git_wip_branch || issue.build_git_wip_branch %>
+<% if params[:git_wip_branch].present? %>
+  <% record.attributes = params.require(:git_wip_branch).permit(:repository_id, :base_name, :compare_name) %>
+<% end %>
+<% onchange_fn = "updateIssueFrom('#{escape_javascript update_issue_form_path(issue.project, issue)}', this)" %>
+
+<div class="tabular">
+  <%= form.fields_for :git_wip_branch, record do |f| %>
+    <p>
+      <%= f.select :repository_id, issue.project.repositories.select { |repo| repo.no_merged_branches.present? }.map { |repo| [ repo.name, repo.id ] },
+        { include_blank: true, label: :label_compare_branch }, { onchange: onchange_fn }
+      %>
+      <%= f.select :compare_name, (record.repository.try(:no_merged_branches) || []).uniq.select { |branch| record.base_name != branch },
+        { include_blank: true, label: '' }, { onchange: onchange_fn }
+      %>
+    </p>
+    <p>
+      <%= f.select :base_name, (record.repository.try(:branches) || []).uniq.select { |branch| record.compare_name != branch },
+        { include_blank: true, label: :label_base_branch }, { onchange: onchange_fn }
+      %>
+    </p>
+  <% end %>
+</div>

@@ -1,0 +1,8 @@
+en:
+  label_no_merged_branches: Branches not yet merged to default branch
+  label_compare_branch: Working branch
+  label_base_branch: Branch to be merged
+
+  label_view_unmerged_diff: "View differences for %{base_branch} from %{compare_branch}"
+  label_merge_branch: Merge
+  label_revert_branch: Revert
