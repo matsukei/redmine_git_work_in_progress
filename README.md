@@ -6,7 +6,11 @@ This is a plugin that provides Reduine's Issue like "Work In Progress Pull Reque
 
 ## Demo
 
+TODO
+
 ## Usage
+
+TODO
 
 ## Requirement
 
@@ -29,11 +33,11 @@ Redmine 3.2.x or higher
 
 ## Contribution
 
-## How to test
-
-Run the following command in your Redmine directory:
-
-`$ bundle exec rake redmine:plugins:test NAME=redmine_git_work_in_progress`
+1. Fork it
+2. Create your feature branch: `git checkout -b new-feature`
+3. Commit your changes: `git commit -am 'add some new feature'`
+4. Push to the branch: `git push origin new-feature`
+5. Create new Pull Request
 
 ## License
 
